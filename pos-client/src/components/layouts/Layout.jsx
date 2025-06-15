@@ -29,7 +29,7 @@ const Layout = ({children}) => {
                 </nav>
             </aside>
 
-            <section>
+            <section className={styles.content}>
                 {children}
             </section>
 
