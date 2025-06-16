@@ -6,6 +6,8 @@
   gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
+  max-height: 90vh;
+  overflow: auto;
 }
 
 .product-list__product-card {

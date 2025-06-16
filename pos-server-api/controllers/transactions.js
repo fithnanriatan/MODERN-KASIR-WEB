@@ -71,20 +71,32 @@ async function addDetailTransaction(transaction_detail, product_id) {
 
 
 async function updateStock(transaction_detail, product_id) {
-	const query = await db.query("SELECT stock FROM products WHERE id IN (?)", [product_id])
+    try {
+        const query = await db.query("SELECT id, stock FROM products WHERE id IN (?)", [product_id]);
 
-	if (!query.error && query.length === product_id.length) {
-		const update_stock = [];
-		
-		query.map((res, i) => {
-			update_stock.push([
-				transaction_detail[i][1],
-				res.stock - transaction_detail[i][2],
-			]);
-		});
+        if (!query.error && query.length === product_id.length) {
+            // Update stock untuk setiap produk
+            const updatePromises = transaction_detail.map(async (detail, index) => {
+                const productId = detail[1];
+                const quantitySold = detail[2];
+                const currentStock = query[index].stock;
+                const newStock = currentStock - quantitySold;
 
-		const update = await db.query("INSERT INTO products (id,stock) VALUES ? ON DUPLICATE KEY UPDATE stock = VALUES(stock)", [update_stock])
+                // Validasi stock mencukupi
+                if (newStock < 0) {
+                    throw new Error(`Insufficient stock for product ID ${productId}. Available: ${currentStock}, Required: ${quantitySold}`);
+                }
 
-		return update;
-	}
-};
+                return db.query("UPDATE products SET stock = ? WHERE id = ?", [newStock, productId]);
+            });
+
+            await Promise.all(updatePromises);
+            return { success: true, message: "Stock updated successfully" };
+        }
+        
+        return { error: "Product data mismatch" };
+    } catch (error) {
+        console.error('Error updating stock:', error);
+        return { error: error.message };
+    }
+}
