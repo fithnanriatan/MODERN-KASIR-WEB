@@ -1,5 +1,70 @@
+/* Option 1: Using CSS Grid */
+.home {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  padding: 20px;
+  align-items: start; /* Align items to top */
+}
+
+/* Option 2: Using Flexbox */
 .home {
   display: flex;
-  gap: 24px;
-  position: relative;
+  gap: 20px;
+  padding: 20px;
+  align-items: flex-start; /* Align items to top */
+}
+
+.home > * {
+  flex: 1; /* Make both containers take equal space */
+}
+
+/* If you want ProductList to take more space than Cart */
+.home > *:first-child {
+  flex: 2;
+}
+
+.home > *:last-child {
+  flex: 1;
+}
+
+/* Option 3: Equal height containers */
+.home {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  align-items: stretch; /* Make both containers same height */
+}
+
+/* Ensure both ProductList and Cart have proper styling */
+.productList,
+.cart {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 400px; /* Set minimum height if needed */
+}
+
+/* Alternative: If you want them to have equal heights always */
+.home {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 1fr;
+  gap: 20px;
+  padding: 20px;
+  min-height: 600px; /* Set container minimum height */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .home {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+  }
+  
+  /* Or for flexbox */
+  .home {
+    flex-direction: column;
+  }
 }

@@ -20,7 +20,6 @@ export default function Home() {
 
   return (
     <Layout>
-      <h1>HOME PAGE</h1>
       <div className={styles.home}>
         <ProductList products={products} />
         <Cart />
