@@ -79,6 +79,9 @@ const Cart = () => {
         products,
       };
 
+      // masukkan ke database
+      api.post("/transactions", payload);
+
       // Success handling
       const change = paidAmount - totalPrice;
       alert(
